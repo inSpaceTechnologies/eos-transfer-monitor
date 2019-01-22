@@ -1,4 +1,15 @@
+const mongoose = require('mongoose');
+
 const config = require('../../config');
+
+const transferSchema = mongoose.Schema({
+  from: { type: String, required: true },
+  to: { type: String, required: true },
+  memo: { type: String, required: true },
+  symbol: { type: String, required: true },
+  amount: { type: Number, required: true },
+});
+const Transfer = mongoose.model('Transfer', transferSchema);
 
 /* Updaters
  * When the Action Handler receives new blocks, for each action in that block, we loop over all updaters and check if
@@ -73,10 +84,22 @@ const updaters = [
  * In this example, we're utilizing it very simply to output the current running token transfer totals to the console.
  */
 
-function logUpdate(payload, blockInfo, context) {
-  if (context.data) {
-    console.info(context.data);
+async function logUpdate(payload, blockInfo, context) {
+  if (!context.data) {
+    return;
   }
+  console.log('New transfer:');
+  console.log(context.data);
+  // add to database
+  const transfer = new Transfer({
+    from: context.data.from,
+    to: context.data.to,
+    memo: context.data.memo,
+    symbol: context.data.symbol,
+    amount: context.data.amount,
+  });
+  await transfer.save();
+  console.log('Saved to database');
 }
 
 const effects = [
