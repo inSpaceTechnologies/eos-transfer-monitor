@@ -1,0 +1,16 @@
+const env = process.env.NODE_ENV;
+
+const config = {
+  development: {
+    eos: {
+      host: 'http://127.0.0.1:8888',
+    },
+  },
+  production: {
+    eos: {
+      host: 'http://mainnet.eoscalgary.io',
+    },
+  },
+};
+
+module.exports = config[env];

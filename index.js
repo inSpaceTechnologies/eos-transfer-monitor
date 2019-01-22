@@ -7,6 +7,9 @@ const { BaseActionWatcher } = require('demux');
 const { NodeosActionReader } = require('demux-eos');
 const ObjectActionHandler = require('./ObjectActionHandler');
 const handlerVersion = require('./handlerVersions/v1');
+const config = require('./config');
+
+console.log(`Enviroment: ${process.env.NODE_ENV}`);
 
 /*
  * This ObjectActionHandler, which does not change the signature from its parent AbstractActionHandler, takes an array
@@ -25,7 +28,7 @@ const actionHandler = new ObjectActionHandler([handlerVersion]);
  * https://github.com/EOSIO/demux-js-eos
  */
 const actionReader = new NodeosActionReader(
-  'http://mainnet.eoscalgary.io', // Thanks EOS Calgary!
+  config.eos.host,
   0,
 );
 
