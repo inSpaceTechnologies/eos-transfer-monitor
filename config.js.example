@@ -7,12 +7,18 @@ const config = {
       account: 'inspace',
       symbol: 'EOS',
     },
+    mongo: {
+      uri: 'mongodb://localhost/inspace',
+    },
   },
   production: {
     eos: {
       host: 'http://mainnet.eoscalgary.io',
       account: 'inspace',
       symbol: 'EOS',
+    },
+    mongo: {
+      uri: 'mongodb://localhost/inspace',
     },
   },
 };
