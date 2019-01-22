@@ -4,11 +4,15 @@ const config = {
   development: {
     eos: {
       host: 'http://127.0.0.1:8888',
+      account: 'inspace',
+      symbol: 'EOS',
     },
   },
   production: {
     eos: {
       host: 'http://mainnet.eoscalgary.io',
+      account: 'inspace',
+      symbol: 'EOS',
     },
   },
 };

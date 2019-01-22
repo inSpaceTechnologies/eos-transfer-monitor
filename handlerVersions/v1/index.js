@@ -1,3 +1,5 @@
+const config = require('../../config');
+
 /* Updaters
  * When the Action Handler receives new blocks, for each action in that block, we loop over all updaters and check if
  * the actionType matches. If it does, we run the corresponding updater's `apply` function. The order of the updaters
@@ -35,14 +37,21 @@ function parseTokenString(tokenString) {
 }
 
 function updateTransferData(state, payload, blockInfo, context) {
-  const { amount, symbol } = parseTokenString(payload.data.quantity);
-  if (!state.volumeBySymbol[symbol]) {
-    state.volumeBySymbol[symbol] = amount;
-  } else {
-    state.volumeBySymbol[symbol] += amount;
+  const { from, to, memo } = payload.data;
+  if (payload.data.to !== config.eos.account) {
+    return;
   }
-  state.totalTransfers += 1;
-  context.stateCopy = JSON.parse(JSON.stringify(state)); // Deep copy state to de-reference
+  const { amount, symbol } = parseTokenString(payload.data.quantity);
+  if (symbol !== config.eos.symbol) {
+    return;
+  }
+  context.data = {
+    from,
+    to,
+    amount,
+    symbol,
+    memo,
+  };
 }
 
 const updaters = [
@@ -65,7 +74,9 @@ const updaters = [
  */
 
 function logUpdate(payload, blockInfo, context) {
-  console.info('State updated:\n', JSON.stringify(context.stateCopy, null, 2));
+  if (context.data) {
+    console.info(context.data);
+  }
 }
 
 const effects = [
