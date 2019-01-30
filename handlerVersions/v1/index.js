@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const config = require('../../config');
 
-const transferSchema = mongoose.Schema({
+const eosTransferSchema = mongoose.Schema({
   from: { type: String, required: true },
   to: { type: String, required: true },
   memo: { type: String, required: true },
   symbol: { type: String, required: true },
   amount: { type: Number, required: true },
 });
-const Transfer = mongoose.model('Transfer', transferSchema);
+const EosTransfer = mongoose.model('EosTransfer', eosTransferSchema);
 
 /* Updaters
  * When the Action Handler receives new blocks, for each action in that block, we loop over all updaters and check if
@@ -91,7 +91,7 @@ async function logUpdate(payload, blockInfo, context) {
   console.log('New transfer:');
   console.log(context.data);
   // add to database
-  const transfer = new Transfer({
+  const transfer = new EosTransfer({
     from: context.data.from,
     to: context.data.to,
     memo: context.data.memo,
